@@ -29,6 +29,16 @@ def debug_task(self):
     print('Request: {0!r}'.format(self.request))
 ```
 
+add celery app to ```__init__.py```:
+```python
+from __future__ import absolute_import
+
+# This will make sure the app is always imported when
+# Django starts so that shared_task will use this app.
+from .celery import app as celery_app
+__all__ = ('celery_app',)
+```
+
 add this settings to your ```settings.py```:
 ```python
 INSTALLED_APPS = [
@@ -56,7 +66,7 @@ CELERY_RESULT_EXTENDED = True
 
 run command for create tables in database:
 ```shell
-python manage.py migration
+python manage.py migrate
 ```
 
 add ```tasks.py``` to your each app and develop:
