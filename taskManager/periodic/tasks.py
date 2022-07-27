@@ -1,18 +1,26 @@
 from celery import shared_task
 import datetime, sys
 from loguru import logger
+import random
 
 logger.add(sys.stdout, colorize=True, format="<green>{time}</green> <level>{message}</level>")
+logger.add("test__{time}.log")
 
 @shared_task(max_retries=5, name='checkDate', queue='normal')
-def checkDate():
-    logger.add("test__{time}.log")
-    today = datetime.datetime.today().date()
-    if today == datetime.datetime(day=2, month=12, year=2022).date():
-        print('done')
+def checkDateTime():
+    now = datetime.datetime.now()
+    logger.info(f"at {now} saved this logg")
+
+@shared_task(max_retries=5, name='checkStatus', queue='normal')
+def checkStatus(*args, **kwargs):
+    number = random.randint(0,10)
+    if number%2 == 0:
+        logger.info(f"good chance")
     else:
-        logger.info('date not valid')
-        raise Exception ('data not valid')
+        logger.info(f"BOOMB!!")
+        raise ValueError("number not even!")    
+
+
 
 """
 Exception	Cause of Error
